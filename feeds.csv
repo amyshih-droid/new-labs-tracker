@@ -1,6 +1,14 @@
-institution,feed_name,feed_url
-MIT,Faculty,https://news.mit.edu/rss/topic/faculty
-MIT,Biology,https://news.mit.edu/rss/topic/biology-and-genetics
-MIT,School of Science,https://news.mit.edu/rss/school/science
-JHU,Tech Ventures,https://hub.jhu.edu/tags/jhtv/articles/feed/
-JHU,Postdocs,https://hub.jhu.edu/tags/postdoctoral-fellows/articles/feed/
+institution,feed_name,feed_url,category
+MIT,Faculty,https://news.mit.edu/rss/topic/faculty,university
+MIT,Biology,https://news.mit.edu/rss/topic/biology-and-genetics,university
+MIT,School of Science,https://news.mit.edu/rss/school/science,university
+MIT,All news,https://news.mit.edu/rss/feed,university
+JHU,Tech Ventures,https://hub.jhu.edu/tags/jhtv/articles/feed/,university
+JHU,Postdocs,https://hub.jhu.edu/tags/postdoctoral-fellows/articles/feed/,university
+Whitehead,News,https://wi.mit.edu/rss.xml,institute
+Broad Institute,News,https://www.broadinstitute.org/rss.xml,institute
+Harvard Medical School,News,https://hms.harvard.edu/rss.xml,med_school
+Damon Runyon,News,https://www.damonrunyon.org/rss.xml,funder
+BioLabs,Blog,https://www.biolabs.io/blog-feed.xml,incubator
+Fierce Biotech,All,https://www.fiercebiotech.com/rss.xml,trade_news
+BioSpace,All,https://www.biospace.com/index.rss,trade_news
