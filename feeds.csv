@@ -1,0 +1,6 @@
+institution,feed_name,feed_url
+MIT,Faculty,https://news.mit.edu/rss/topic/faculty
+MIT,Biology,https://news.mit.edu/rss/topic/biology-and-genetics
+MIT,School of Science,https://news.mit.edu/rss/school/science
+JHU,Tech Ventures,https://hub.jhu.edu/tags/jhtv/articles/feed/
+JHU,Postdocs,https://hub.jhu.edu/tags/postdoctoral-fellows/articles/feed/
