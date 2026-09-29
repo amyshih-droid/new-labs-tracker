@@ -1,133 +1,164 @@
 # New Labs Tracker
 
-A pipeline to detect **new research labs in the US**, starting with life science. Postdocs, fellows, and computational labs are in scope, because they are early signals of labs that are about to start.
+A pipeline to detect **new research labs in the US**, academic or industry, wet/dry/computational
+all in scope. Postdocs, fellows, and early-career award recipients count as **prospective**
+signals, because they're often the earliest sign a new lab is coming.
 
 ## Goal
 
-Build a database and simple web interface where each row is a **candidate new lab**, with:
+Build a database (and eventually a simple web interface) where each row is a **candidate new
+lab**, with:
 
 - a named PI or company
 - institution, department, and research area
 - evidence (quote and source link)
-- a confidence score and a status (`candidate`, `likely`, `confirmed`, `rejected`)
+- a confidence score and status (`candidate`, `likely`, `confirmed`, `rejected`)
 
-The main idea is that a lab is an entity and every source produces *signals* about it. Weak evidence from several sources (a grant, a news item, a job ad) can add up to a confident lead.
+The core idea: a lab is an entity, and every source produces *signals* about it. Weak evidence
+from several independent sources (a grant, a news item, a job ad) should combine into a
+confident lead — no single source is trusted alone. **This multi-source merge is not built yet**;
+right now the pipeline covers one source (RSS news) end to end, from ingestion through
+LLM classification and human evaluation.
 
 ### Planned sources
 
 | # | Source | Status |
 |---|---|---|
-| 1.1 | NIH K99/R00 grants (RePORTER API) | Done |
-| 1.2 | University, department, and institute news (RSS) | **Done for a first batch of feeds** |
-| 1.3 | Department faculty pages (weekly diff) | Not started |
-| 1.4 | Incubators and startup facilitators | Partly (BioLabs blog, trade press, funders) |
-| 2 | LLM analysis of events, including job postings that mention a lab that does not exist yet (max 3 job sites) | Not started |
+| 1.1 | NIH K99/R00 grants (RePORTER API) | done |
+| 1.2 | University/institute/med-school news (RSS) | **Done** — full pipeline built, tuned, evaluated |
+| 1.3 | Department faculty pages (weekly diff for new names) | Not started |
+| 1.4 | Incubators and startup facilitators | Partly — BioLabs blog, trade press, funder feeds |
+| 2 | LLM detection of implied new labs (e.g. job ads referencing a not-yet-existing lab) | Not started |
+| — | Job postings (max 3 sites: HigherEdJobs, Science Careers, Nature Careers) | Not started |
 
-## Current pipeline
+## Pipeline
 
 ```
-feeds.csv -> fetch.py -> labs.db -> export_leads.py -> potential_leads.csv
+feeds.csv → fetch.py → labs.db (articles)
+                              ↓
+                         enrich.py  (full-text retrieval)
+                              ↓
+              ┌───────────────┴───────────────┐
+              ↓                                ↓
+   review_app.py (human label)      classify.py (LLM label)
+              ↓                                ↓
+              └───────────────┬───────────────┘
+                              ↓
+                         compare.py  (agreement check)
 ```
 
-| Step | File | What it does |
-|---|---|---|
-| 1 | `feeds.csv` | Registry of RSS feeds: `institution, feed_name, feed_url, category` |
-| 2 | `fetch.py` | Downloads each feed, dedupes by article URL, and stores articles in SQLite. Flags `keyword_hit=1` when the title or summary matches a pattern for new faculty, new labs, postdocs, startups, or awards. Faculty-style feeds and trade/incubator/funder feeds use different patterns. |
-| 3 | `labs.db` | SQLite database with an `articles` table |
-| 4 | `check.py` | Prints articles and keyword hits per feed, to judge which sources are worth keeping |
-| 5 | `export_leads.py` | Writes the keyword hits to `potential_leads.csv` |
-
-Written but **not yet run**: `enrich.py` (downloads full article text for hits) and `review_app.py` (a Streamlit app for labeling hits as `new_lab`, `prospective`, `facility`, or `not_relevant`).
-
-## Feeds in `feeds.csv`
-
-| Category | Feeds |
+| File | What it does |
 |---|---|
-| `university` | MIT (Faculty, Biology, School of Science, All news), JHU (Tech Ventures, Postdocs) |
-| `institute` | Whitehead, Broad Institute |
-| `med_school` | Harvard Medical School |
-| `funder` | Damon Runyon |
-| `incubator` | BioLabs blog |
-| `trade_news` | Fierce Biotech, BioSpace |
+| `feeds.csv` | Registry of RSS feeds: `institution, feed_name, feed_url, category`. Categories: `university`, `institute`, `med_school`, `funder`, `incubator`, `trade_news`. |
+| `fetch.py` | Downloads each feed via `feedparser`, dedupes by article URL (`INSERT OR IGNORE`), and stores articles in `labs.db`'s `articles` table. Flags `keyword_hit=1` using one of two regex patterns depending on feed category (faculty/hire language vs. startup/award language). Skips dead feeds with a warning instead of failing the whole run. |
+| `discover_feeds.py` | Given a list of institution homepages, scrapes for RSS `<link>` tags and tries common feed paths, to help grow `feeds.csv`. |
+| `enrich.py` | For flagged articles, downloads the live page and extracts clean article body text via `trafilatura`, writing it into `articles.full_text`. Idempotent — only processes rows missing full text. |
+| `check.py` | Prints per-feed article/hit counts, for a quick sanity check on source quality. |
+| `export_leads.py` | Writes keyword hits (with human review/notes) to `potential_leads.csv`. |
+| `review_app.py` | Streamlit app (`streamlit run review_app.py`) for human labeling. Shows one flagged article at a time with the triggering keyword highlighted; saves a verdict straight to `articles.review`. |
+| `sync_labels.py` | One-time/as-needed sync: pushes corrected labels from a CSV (e.g. after editing `model_comparison_annotation.csv`) back into `articles.review`, matched by URL. |
+| `classify.py` | Sends each article's full text to an LLM, which returns exactly one classification for the whole article: `prospective`, `facility`, or `not_relevant` (see below), plus a confidence score and a short verbatim evidence quote. Writes to the `candidates` table. Safe to re-run — deletes and re-inserts per article. |
+| `compare.py` | Joins `articles.review` (human label) against `candidates.role` (LLM label) and reports agreement, printing the disagreements for manual triage. |
 
-The first run stored about 257 articles, of which 14 were keyword hits.
+### Human/LLM label scheme
 
-## What `potential_leads.csv` is
+Both humans and the LLM classify each article into exactly one of three categories:
 
-A **screening list**, not a list of confirmed new labs. A keyword hit means an article *might* announce a new lab. A person still has to read it and decide.
+- **`prospective`** — a named person who may eventually start their own lab (a newly hired
+  PI, an early-career postdoc/fellow on an independent-research-track award, or a newly
+  founded startup/spinout). Explicitly *excludes* general honorific awards to established
+  researchers, retrospective profiles with no fresh hire news, program launches with no named
+  individual yet, and ordinary company hiring — *unless* the award grants real operating
+  resources (lab space, independent funding), which still counts.
+- **`facility`** — new lab space, a new building, or a department being newly formed/
+  restructured, located in the US, with no individual's own lab as the subject. Explicitly
+  *excludes* leadership transitions at existing (not newly formed) units, non-US facilities,
+  incidental facility mentions, and new equipment/instruments built by an existing team.
+- **`not_relevant`** — everything else.
 
-| Column | Meaning |
-|---|---|
-| `institution`, `feed_name`, `category` | Where the article came from |
-| `title`, `published`, `url` | The article, its date, and a link |
-| `matched_phrase` | The words that triggered the flag |
-| `review` | Verdict, to be filled in: `new_lab`, `prospective`, `facility`, or `not_relevant` |
-| `notes` | Free text (PI name, reasoning) |
+The full category definitions, with the negative examples above, live in `classify.py`'s
+`PROMPT`.
 
-### Review labels
+## Model evaluation
 
-- `new_lab`: names a person or company starting a lab
-- `prospective`: an awardee, postdoc, or fellow who may start a lab
-- `facility`: new lab space with no named PI
-- `not_relevant`: anything else
+Before settling on a model, `classify_experiment.py` and `compare_models.py` were used to
+run the same prompt across four configs — `gpt-5.4-nano`, and `gpt-6-luna` at `high`/`medium`/
+`low` reasoning effort — against a fully hand-labeled set of 228 articles, with results in
+`results/*.csv` and a side-by-side comparison in `model_comparison.csv` /
+`model_disagreements.csv`.
 
-### Preliminary read of the first 14 hits (from titles only, not yet reviewed)
+Findings:
+- **`gpt-5.4-nano`** never missed a true `prospective`/`facility` article (100% recall on both),
+  but at heavy precision cost (~44 false positives out of 228).
+- **`gpt-6-luna` (medium)** had the best balance of accuracy and precision, and was — in a few
+  cases — more *correct* than the initial ground truth (e.g. correctly excluding non-US BioLabs
+  facility posts that had been mislabeled `facility`).
 
-- **Probably prospective (2):** the two Damon Runyon announcements. They likely name early-career scientists, so they look like the most useful rows.
-- **Probably facility (1):** BioLabs Philadelphia expansion.
-- **Possible new faculty (1):** MIT HASS "welcomes six new faculty for 2026" (humanities and social sciences, so likely outside a life-science focus).
-- **Postdoc programs (4):** JHU Provost's Fellows, a Beckman fellow, and MIT's Quantum postdoc program. Prospective at best.
-- **Noise (6):** for example the AAAS election, a postdoc retreat, and research stories.
+**Current choice: `gpt-6-luna` at `medium` reasoning effort.** After several rounds of
+prompt refinement and ground-truth correction (see `compare_output.txt` for the latest run),
+agreement with human labels is **~97% (221–222/228)**. Remaining disagreements are
+almost entirely genuine scope-boundary judgment calls rather than model or prompt errors — e.g.
+whether a postbac research internship (vs. a postdoc) counts as `prospective`, whether an
+unfilled job posting counts without a named hire, and whether an obituary describing a
+just-formed lab should count given the lab's now-uncertain future. A small remainder reflects
+ordinary LLM run-to-run variance on borderline articles, not a fixable defect.
 
-## Known limitations
-
-- **Keyword hits are noisy.** Phrases like "postdoctoral fellow" and "new member" match unrelated stories.
-- **Some hits are old.** 8 of the 14 are dated 2016 to 2025, because some feeds return older items. "New" needs a date check.
-- **Feeds only return their latest 10 to 50 items.** Busy feeds should be fetched daily so items are not missed.
-- **General news feeds have low yield for wet labs.** Department-level feeds, funder announcements, and structured sources (RePORTER) should be more productive.
-- Titles alone are not enough to decide. Full text is needed, which is what `enrich.py` is for.
+`sync_labels.py` exists because ground-truth corrections were made in a CSV
+(`model_comparison_annotation.csv`) during this process and needed to be pushed back into
+`labs.db` — keep the CSV and the database in sync if you relabel again.
 
 ## Setup
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/new-labs-tracker.git
-cd new-labs-tracker
 python3 -m venv .venv
-source .venv/bin/activate            # Windows: .venv\Scripts\activate
-pip install -r requirements.txt      # feedparser, trafilatura, pandas, streamlit
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Create a `.env` file (not committed — see `.gitignore`) with:
+```
+OPENAI_API_KEY=sk-...
 ```
 
 ## Usage
 
 ```bash
-python fetch.py            # pull feeds and flag keyword hits
-python check.py            # per-feed counts and the list of hits
-python export_leads.py     # write potential_leads.csv
+python fetch.py                          # pull RSS feeds into labs.db
+python enrich.py                         # fetch full text for keyword hits
+streamlit run review_app.py              # human-label flagged articles (optional)
+python classify.py                       # LLM-classify articles into labs.db
+python compare.py > compare_output.txt   # check LLM vs. human agreement
 ```
 
-Once `enrich.py` and `review_app.py` are added:
-
+To re-run a model/reasoning-level comparison:
 ```bash
-python enrich.py                 # download full text for hits
-streamlit run review_app.py      # label the hits
-python export_leads.py           # export with excerpts and verdicts
+python classify_experiment.py --labeled-only   # or --from-candidates for the full set
+python compare_models.py
 ```
 
-To add a source, add a row to `feeds.csv` and pick a category.
+## Known limitations
+
+- Only one of the five planned sources (RSS news) is fully built.
+- No cross-source corroboration yet — a single article's `prospective`/`facility` call is
+  currently trusted on its own; the project's original design intends this only as one weak
+  signal among several, combined later into a confidence score.
+- `feeds.csv` currently mixes US and non-US sources (e.g. the BioLabs blog covers global
+  locations); `classify.py`'s prompt filters non-US facilities at classification time, but
+  `fetch.py`'s keyword filter does not — worth reviewing if feed volume grows.
+- No automated hallucination/grounding guardrails are currently wired into `classify.py` (a
+  verbatim-quote check and schema validation were prototyped earlier but are not in the
+  current version) — `evidence_quote` should be spot-checked against `full_text` periodically,
+  especially for `prospective` verdicts.
+- No scheduling yet — everything runs manually.
 
 ## Next steps
 
-1. **Add a date filter** to `export_leads.py` so only recent items (for example the last 12 months) are exported.
-2. **Run `enrich.py` and `review_app.py`** and label 30 to 50 hits. These labels become the test set for the LLM step.
-3. **Build `classify.py`.** An LLM reads each hit's full text and returns named candidates, with role (`new_pi`, `postdoc_or_fellow`, `startup_or_company`), wet/dry/mixed/unclear, confidence, and an evidence quote. Compare it against the manual labels.
-4. **Build the NIH RePORTER collector (K99/R00).** Structured, mostly biomedical, and it names PIs, so it should give the highest-quality leads.
-5. **Add a `labs` table** that merges signals from different sources into one entity per lab (fuzzy match on PI name plus institution).
-6. **Add faculty-page monitoring** for about 20 life-science departments (weekly snapshots, with an LLM extracting names).
-7. **Add job postings** (up to 3 sites), with the LLM flagging labs that do not exist yet.
-8. **Automate weekly** with GitHub Actions and build a simple dashboard (Streamlit): a "new this week" view, filters, and confirm/reject buttons.
-
-## Notes
-
-- Keep API keys in a `.env` file and never commit it. `.env`, `.venv/`, and `__pycache__/` belong in `.gitignore`.
-- Check each site's terms of service and `robots.txt` before scraping, especially for job sites.
-- Store only public, professional information.
+1. Decide and document the remaining scope judgment calls (postbac vs. postdoc, job postings,
+   obituaries with newly-formed labs) so future similar articles are handled consistently.
+2. Build the NIH RePORTER K99/R00 collector — likely the highest-precision untapped source.
+3. Add department faculty-page monitoring (~20 life-science departments, weekly diff).
+4. Add a job-posting collector (max 3 sites) for phantom-lab detection.
+5. Merge signals across sources into a single `labs` table with fuzzy PI/institution
+   matching and a combined confidence score — this is where a single source's `prospective`
+   call stops being trusted alone.
+6. Automate weekly runs via GitHub Actions; build a simple dashboard.
