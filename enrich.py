@@ -18,7 +18,7 @@ con.commit()
 
 rows = con.execute(
     "SELECT url, title FROM articles "
-    "WHERE keyword_hit=1 AND (full_text IS NULL OR full_text='')"
+    "WHERE (full_text IS NULL OR full_text='')"
 ).fetchall()
 print(f"{len(rows)} articles to fetch")
 
