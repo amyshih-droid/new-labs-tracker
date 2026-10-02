@@ -1,0 +1,71 @@
+institution,feed_name,feed_url,category
+Johns Hopkins Medicine,News Releases,https://www.hopkinsmedicine.org/news/newsroom/news-releases/rss,med_school
+Mayo Clinic,Research News,https://newsnetwork.mayoclinic.org/category/research/feed/,med_school
+Cleveland Clinic,Newsroom,https://newsroom.clevelandclinic.org/feed/,med_school
+UCLA Health,Newsroom,https://www.uclahealth.org/news/rss.xml,med_school
+NYU Langone,News Hub,https://nyulangone.org/news/rss,med_school
+Mass General,Research News,https://www.massgeneral.org/news/rss,med_school
+Brigham and Women's,Newsroom,https://www.brighamandwomens.org/about-bwh/newsroom/rss,med_school
+Duke Health,News,https://corporate.dukehealth.org/news/feed,med_school
+Michigan Medicine,Health Lab,https://labblog.uofmhealth.org/feed,med_school
+Cedars-Sinai,Newsroom,https://www.cedars-sinai.org/newsroom.rss,med_school
+Northwestern Medicine,News,https://news.feinberg.northwestern.edu/feed/,med_school
+Penn Medicine,News Releases,https://www.pennmedicine.org/news/news-releases/feed,med_school
+WashU Medicine,News Hub,https://medicine.wustl.edu/feed/,med_school
+Mount Sinai,Newsroom,https://www.mountsinai.org/about/newsroom/rss,med_school
+Vanderbilt VUMC,News & Communications,https://news.vumc.org/feed/,med_school
+Scripps Research,News,https://www.scripps.edu/news-and-events/rss.xml,institute
+St. Jude,Research News,https://www.stjude.org/research/news-publications/research-news.rss,institute
+Dana-Farber,News Releases,https://www.dana-farber.org/newsroom/news-releases.rss,institute
+Allen Institute,News,https://alleninstitute.org/feed/,institute
+HHMI,News,https://www.hhmi.org/news/rss,institute
+Whitehead Institute,News,https://wi.mit.edu/rss.xml,institute
+Broad Institute,News,https://www.broadinstitute.org/rss.xml,institute
+Parker Institute,News,https://www.parkerici.org/feed/,institute
+Salk Institute,News Releases,https://www.salk.edu/news-release/feed/,institute
+Gladstone Institutes,News,https://gladstone.org/news/rss,institute
+Cold Spring Harbor Lab,CSHL News,https://www.cshl.edu/feed/,institute
+Wyss Institute,News & Discoveries,https://wyss.harvard.edu/feed/,institute
+MIT,All News,https://news.mit.edu/rss/feed,university
+Stanford,Science News,https://news.stanford.edu/section/science-technology/feed/,university
+Caltech,Research News,https://www.caltech.edu/about/news/rss.xml,university
+UCSD,Health & Medicine,https://today.ucsd.edu/rss/health-medicine,university
+Columbia,Science,https://news.columbia.edu/science/rss.xml,university
+Cornell,Chronicle - Science,https://news.cornell.edu/rss/science,university
+UChicago,Science & Medicine,https://news.uchicago.edu/topics/science-and-medicine/rss,university
+UPenn,Penn Today Science,https://penntoday.upenn.edu/science-technology/feed,university
+Johns Hopkins University,Science & Tech,https://hub.jhu.edu/science-technology/feed/,university
+Princeton,Research,https://www.princeton.edu/news/research/rss.xml,university
+Harvard University,Science & Tech,https://news.harvard.edu/gazette/section/science-technology/feed/,university
+Yale University,Science & Health,https://news.yale.edu/topics/science-health/rss,university
+UC Berkeley,Research & Science,https://news.berkeley.edu/category/research/feed/,university
+WARF (Wisconsin),News,https://www.warf.org/feed/,innovation
+Columbia Technology Ventures,News,https://techventures.columbia.edu/news/rss,innovation
+UChicago Polsky,News,https://polsky.uchicago.edu/feed/,innovation
+Penn Center for Innovation,News,https://pci.upenn.edu/feed/,innovation
+Duke OTC,News,https://otc.duke.edu/feed/,innovation
+UCSF Innovation Ventures,News,https://innovation.ucsf.edu/rss,innovation
+MIT TLO,Tech Licensing News,https://tlo.mit.edu/news/rss.xml,innovation
+Harvard OTD,Tech Development News,https://otd.harvard.edu/news/feed/,innovation
+Stanford OTL,Tech Licensing News,https://otl.stanford.edu/news/feed,innovation
+JLABS,News,https://jlabs.jnjinnovation.com/rss.xml,incubator
+QB3,News,https://qb3.org/feed/,incubator
+MBC BioLabs,News,https://mbcbiolabs.com/feed/,incubator
+IndieBio,News,https://indiebio.co/feed/,incubator
+Techstars,Healthcare Blog,https://www.techstars.com/the-line/categories/healthcare/rss.xml,incubator
+Alexandria LaunchLabs,News,https://alexandrialaunchlabs.com/feed/,incubator
+LabCentral,News & Press,https://labcentral.org/feed,incubator
+Y Combinator,YC Bio Blog,https://blog.ycombinator.com/feed/,incubator
+MassBio,News,https://www.massbio.org/news/feed/,incubator
+NIH,News Releases,https://www.nih.gov/news-events/news-releases/rss.xml,funder
+NSF,Bio News,https://www.nsf.gov/rss/rss_www_news.xml,funder
+Wellcome Trust,News,https://wellcome.org/news/rss,funder
+Bill & Melinda Gates Foundation,Press Releases,https://www.gatesfoundation.org/rss,funder
+Chan Zuckerberg Initiative,Science News,https://chanzuckerberg.com/science/feed/,funder
+Damon Runyon,News,https://www.damonrunyon.org/rss.xml,funder
+Endpoints News,Early-Stage Biotech,https://endpts.com/channel/early-stage/feed/,trade_news
+STAT News,Pharma & Biotech,https://www.statnews.com/category/pharmalot/feed/,trade_news
+Fierce Biotech,All News,https://www.fiercebiotech.com/rss/xml,trade_news
+BioSpace,All News,https://www.biospace.com/rss,trade_news
+Labiotech.eu,News,https://www.labiotech.eu/feed/,trade_news
+GEN,Genetic Engineering & Biotech News,https://www.genengnews.com/feed/,trade_news

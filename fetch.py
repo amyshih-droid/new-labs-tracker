@@ -31,7 +31,7 @@ OTHER_KEYWORDS = re.compile(
     r"announces? .{0,40}(fellows|awardees|scholars|investigators)",
     re.I,
 )
-OTHER_CATEGORIES = {"trade_news", "incubator", "funder"}
+OTHER_CATEGORIES = {"trade_news", "incubator", "funder", "innovation"}
 
 
 def init_db():

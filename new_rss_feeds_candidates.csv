@@ -1,0 +1,52 @@
+institution,feed_name,feed_url,category
+Cornell,"Health, Nutrition & Medicine",https://news.cornell.edu/taxonomy/term/14248/feed,university
+Cornell,Life Sciences & Veterinary Medicine,https://news.cornell.edu/taxonomy/term/15056/feed,university
+Cornell,College of Agriculture and Life Sciences,https://news.cornell.edu/taxonomy/term/21/feed,university
+Cornell,College of Veterinary Medicine,https://news.cornell.edu/taxonomy/term/35/feed,university
+Cornell,Weill Cornell Medicine-NY,https://news.cornell.edu/taxonomy/term/14/feed,med_school
+Cornell,Physical Sciences & Engineering,https://news.cornell.edu/taxonomy/term/22/feed,university
+UC Santa Barbara,Life Sciences,https://news.ucsb.edu/path/10/rss.xml,university
+UC Santa Barbara,Medicine & Health,https://news.ucsb.edu/path/9/rss.xml,med_school
+UC Santa Barbara,Faculty,https://news.ucsb.edu/path/16/rss.xml,university
+UC Santa Barbara,Science + Technology,https://news.ucsb.edu/path/8/rss.xml,university
+UC Santa Barbara,Environment + Sustainability,https://news.ucsb.edu/path/11/rss.xml,university
+Yale University,Health & Medicine,https://news.yale.edu/topics/health-medicine/rss,university
+Yale University,Science & Technology,https://news.yale.edu/topics/science-technology/rss,university
+Yale University,All Topics,https://news.yale.edu/news-rss,university
+Yale School of Medicine,Top Stories,https://medicine.yale.edu/news-rss/?keywordIds=7&orgId=113592&title=Top+Stories,med_school
+Harvard University,All Stories,https://news.harvard.edu/gazette/feed/,university
+Harvard University,Science & Technology,https://news.harvard.edu/gazette/section/science-technology/feed/,university
+Harvard University,Health & Medicine,https://news.harvard.edu/gazette/section/health/feed/,med_school
+UC Riverside,All News,https://news.ucr.edu/custom/homepage/rss.xml,university
+UC Riverside,Research,https://news.ucr.edu/custom/research/rss.xml,university
+UC Riverside,Faculty,https://news.ucr.edu/custom/faculty/rss.xml,university
+UC Riverside,School of Medicine,https://news.ucr.edu/custom/school-medicine/rss.xml,med_school
+UC Riverside,Biomedical Sciences,https://news.ucr.edu/custom/biomedical-sciences/rss.xml,med_school
+UC Riverside,Biochemistry,https://news.ucr.edu/custom/biochemistry/rss.xml,university
+UC Riverside,Bioengineering,https://news.ucr.edu/custom/bioengineering/rss.xml,university
+UC Riverside,Chemical and Environmental Engineering,https://news.ucr.edu/custom/chemical-and-environmental-engineering/rss.xml,university
+UC Riverside,College of Natural and Agricultural Sciences,https://news.ucr.edu/custom/college-natural-and-agricultural-sciences/rss.xml,university
+UC Riverside,Vice Chancellor Research and Economic Development,https://news.ucr.edu/custom/vice-chancellor-research-and-economic-development/rss.xml,university
+UC Riverside,Artificial Intelligence,https://news.ucr.edu/custom/artificial-intelligence/rss.xml,university
+UC Riverside,Aging,https://news.ucr.edu/custom/aging/rss.xml,university
+UC Riverside,Center for Healthy Communities,https://news.ucr.edu/custom/center-healthy-communities/rss.xml,university
+OHSU,All News,https://news.ohsu.edu/rss,med_school
+OHSU,School of Medicine,https://news.ohsu.edu/rss/category/school-of-medicine,med_school
+OHSU,Research,https://news.ohsu.edu/rss/category/research,med_school
+OHSU,Awards and accomplishments,https://news.ohsu.edu/rss/category/awards-and-accomplishments,med_school
+UAMS,News Releases,https://news.uams.edu/feed/,med_school
+UAMS,Medical Center News,https://news.uams.edu/category/medical-center-news/feed/,med_school
+UAMS,University News,https://news.uams.edu/category/university-news/feed/,med_school
+UAMS,Health,https://news.uams.edu/category/health/feed/,med_school
+Ohio State,Science & Medicine,https://news.osu.edu/tagfeed/en-us/tags/sm-homepage,university
+Ohio State,Top News,https://news.osu.edu/tagfeed/en-us/tags/news%2Cresearch__news,university
+UC San Diego,Top Stories,https://today.ucsd.edu/rss/top_stories.xml,university
+UC San Diego,Research,https://today.ucsd.edu/rss/research.xml,university
+Johns Hopkins University,All News,https://hub.jhu.edu/feed/,university
+University of Washington,All News,https://www.washington.edu/news/feed/,university
+UC Berkeley,All News,https://news.berkeley.edu/feed/,university
+University of Michigan,All News,https://news.umich.edu/feed/,university
+Caltech,News,https://www.caltech.edu/about/news/rss,institute
+Salk Institute,News,https://www.salk.edu/feed/,institute
+Fred Hutchinson Cancer Center,News,https://www.fredhutch.org/en/news/feed.xml,institute
+St. Jude Children's Research Hospital,News,https://www.stjude.org/about-st-jude/stories.html?format=feed&type=rss,institute

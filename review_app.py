@@ -8,7 +8,7 @@ from fetch import FACULTY_KEYWORDS, OTHER_KEYWORDS, OTHER_CATEGORIES
 st.set_page_config(page_title="Lead review", layout="wide")
 con = sqlite3.connect("labs.db", check_same_thread=False)
 
-LABELS = ["new_lab", "prospective", "facility", "not_relevant"]
+LABELS = ["prospective", "facility", "not_relevant"]
 
 
 def clean(html):
@@ -17,7 +17,7 @@ def clean(html):
 
 st.title("Review potential new-lab leads")
 mode = st.sidebar.radio("Show", ["Unreviewed", "Reviewed", "All"])
-where = "keyword_hit=1"
+where = "keyword_hit=0"
 if mode == "Unreviewed":
     where += " AND (review IS NULL OR review='')"
 elif mode == "Reviewed":

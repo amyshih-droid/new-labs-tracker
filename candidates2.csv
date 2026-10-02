@@ -1,17 +1,4 @@
 institution,feed_name,feed_url,category
-MIT,Faculty,https://news.mit.edu/rss/topic/faculty,university
-MIT,Biology,https://news.mit.edu/rss/topic/biology-and-genetics,university
-MIT,School of Science,https://news.mit.edu/rss/school/science,university
-MIT,All news,https://news.mit.edu/rss/feed,university
-JHU,Tech Ventures,https://hub.jhu.edu/tags/jhtv/articles/feed/,university
-JHU,Postdocs,https://hub.jhu.edu/tags/postdoctoral-fellows/articles/feed/,university
-Whitehead,News,https://wi.mit.edu/rss.xml,institute
-Broad Institute,News,https://www.broadinstitute.org/rss.xml,institute
-Harvard Medical School,News,https://hms.harvard.edu/rss.xml,med_school
-Damon Runyon,News,https://www.damonrunyon.org/rss.xml,funder
-BioLabs,Blog,https://www.biolabs.io/blog-feed.xml,incubator
-Fierce Biotech,All,https://www.fiercebiotech.com/rss.xml,trade_news
-BioSpace,All,https://www.biospace.com/index.rss,trade_news
 Cornell,"Health, Nutrition & Medicine",https://news.cornell.edu/taxonomy/term/14248/feed,university
 Cornell,Life Sciences & Veterinary Medicine,https://news.cornell.edu/taxonomy/term/15056/feed,university
 Cornell,College of Agriculture and Life Sciences,https://news.cornell.edu/taxonomy/term/21/feed,university
@@ -83,11 +70,14 @@ St. Jude,Research News,https://www.stjude.org/research/news-publications/researc
 Dana-Farber,News Releases,https://www.dana-farber.org/newsroom/news-releases.rss,institute
 Allen Institute,News,https://alleninstitute.org/feed/,institute
 HHMI,News,https://www.hhmi.org/news/rss,institute
+Whitehead Institute,News,https://wi.mit.edu/rss.xml,institute
+Broad Institute,News,https://www.broadinstitute.org/rss.xml,institute
 Parker Institute,News,https://www.parkerici.org/feed/,institute
 Salk Institute,News Releases,https://www.salk.edu/news-release/feed/,institute
 Gladstone Institutes,News,https://gladstone.org/news/rss,institute
 Cold Spring Harbor Lab,CSHL News,https://www.cshl.edu/feed/,institute
 Wyss Institute,News & Discoveries,https://wyss.harvard.edu/feed/,institute
+MIT,All News,https://news.mit.edu/rss/feed,university
 Stanford,Science News,https://news.stanford.edu/section/science-technology/feed/,university
 Caltech,Research News,https://www.caltech.edu/about/news/rss.xml,university
 UCSD,Health & Medicine,https://today.ucsd.edu/rss/health-medicine,university
@@ -97,6 +87,7 @@ UChicago,Science & Medicine,https://news.uchicago.edu/topics/science-and-medicin
 UPenn,Penn Today Science,https://penntoday.upenn.edu/science-technology/feed,university
 Johns Hopkins University,Science & Tech,https://hub.jhu.edu/science-technology/feed/,university
 Princeton,Research,https://www.princeton.edu/news/research/rss.xml,university
+Harvard University,Science & Tech,https://news.harvard.edu/gazette/section/science-technology/feed/,university
 Yale University,Science & Health,https://news.yale.edu/topics/science-health/rss,university
 UC Berkeley,Research & Science,https://news.berkeley.edu/category/research/feed/,university
 WARF (Wisconsin),News,https://www.warf.org/feed/,innovation
@@ -122,6 +113,7 @@ NSF,Bio News,https://www.nsf.gov/rss/rss_www_news.xml,funder
 Wellcome Trust,News,https://wellcome.org/news/rss,funder
 Bill & Melinda Gates Foundation,Press Releases,https://www.gatesfoundation.org/rss,funder
 Chan Zuckerberg Initiative,Science News,https://chanzuckerberg.com/science/feed/,funder
+Damon Runyon,News,https://www.damonrunyon.org/rss.xml,funder
 Endpoints News,Early-Stage Biotech,https://endpts.com/channel/early-stage/feed/,trade_news
 STAT News,Pharma & Biotech,https://www.statnews.com/category/pharmalot/feed/,trade_news
 Fierce Biotech,All News,https://www.fiercebiotech.com/rss/xml,trade_news
