@@ -31,6 +31,15 @@ LLM classification and human evaluation.
 | 2 | LLM detection of implied new labs (e.g. job ads referencing a not-yet-existing lab) | Not started |
 | — | Job postings (max 3 sites: HigherEdJobs, Science Careers, Nature Careers) | Not started |
 
+## Current scale
+
+169 RSS feeds (feeds.csv), up from the original 13 — across university, institute, med-school, funder, incubator, and trade-press categories, plus a new innovation category for tech-transfer offices.
+2,052 articles fetched and stored in labs.db's articles table.
+1,983 articles classified by the LLM (a handful lack full text and are skipped — see enrich.py failures).
+86 flagged as leads: 52 prospective, 34 facility, out of 1,897 not_relevant.
+86/86 flagged leads have structured content extracted (names, departments, research domains/techniques) via extract_content.py.
+228 articles hand-labeled for prompt evaluation — this ground truth has not been re-validated against the new, much larger 2,052-article batch (see Known limitations).
+
 ## Pipeline
 
 ```
@@ -59,6 +68,8 @@ feeds.csv → fetch.py → labs.db (articles)
 | `sync_labels.py` | One-time/as-needed sync: pushes corrected labels from a CSV (e.g. after editing `model_comparison_annotation.csv`) back into `articles.review`, matched by URL. |
 | `classify.py` | Sends each article's full text to an LLM, which returns exactly one classification for the whole article: `prospective`, `facility`, or `not_relevant` (see below), plus a confidence score and a short verbatim evidence quote. Writes to the `candidates` table. Safe to re-run — deletes and re-inserts per article. |
 | `compare.py` | Joins `articles.review` (human label) against `candidates.role` (LLM label) and reports agreement, printing the disagreements for manual triage. |
+| `extract_content.py` | For articles classified prospective or facility, extracts names, departments, and domains via the same model. Includes a grounding check (names_grounded) that verifies each extracted name actually appears in the source text, as a basic hallucination guard. |
+
 
 ### Human/LLM label scheme
 
@@ -127,7 +138,8 @@ python fetch.py                          # pull RSS feeds into labs.db
 python enrich.py                         # fetch full text for keyword hits
 streamlit run review_app.py              # human-label flagged articles (optional)
 python classify.py                       # LLM-classify articles into labs.db
-python compare.py > compare_output.txt   # check LLM vs. human agreement
+python compare.py > compare_output.txt   # check LLM vs. human agreement (optional)
+python extract_content.py                # extract names/departments/domains for new leads
 ```
 
 To re-run a model/reasoning-level comparison:
